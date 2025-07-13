@@ -61,6 +61,7 @@ namespace PengerAPI.Controllers
         {
             var response = new HealthCheckResponse
             {
+                Status = "Checking",
                 Timestamp = DateTime.UtcNow,
                 Version = "1.0.0",
                 Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"
@@ -125,15 +126,31 @@ namespace PengerAPI.Controllers
                 var canConnect = await _context.Database.CanConnectAsync();
                 if (!canConnect)
                 {
-                    return StatusCode(503, ApiResponse<object>.ErrorResult("Database not ready"));
+                    return StatusCode(503, ApiResponse<HealthCheckResponse>.ErrorResult("Database not ready"));
                 }
 
-                return Ok(ApiResponse<object>.SuccessResult(null, "Service is ready"));
+                var response = new HealthCheckResponse
+                {
+                    Status = "Ready",
+                    Timestamp = DateTime.UtcNow,
+                    Version = "1.0.0",
+                    Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"
+                };
+
+                return Ok(ApiResponse<HealthCheckResponse>.SuccessResult(response, "Service is ready"));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Readiness check failed");
-                return StatusCode(503, ApiResponse<object>.ErrorResult("Service not ready"));
+                var errorResponse = new HealthCheckResponse
+                {
+                    Status = "Not Ready",
+                    Timestamp = DateTime.UtcNow,
+                    Version = "1.0.0",
+                    Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production",
+                    Error = ex.Message
+                };
+                return StatusCode(503, ApiResponse<HealthCheckResponse>.ErrorResult("Service not ready"));
             }
         }
 
@@ -144,7 +161,15 @@ namespace PengerAPI.Controllers
         public ActionResult GetLiveness()
         {
             // Simple liveness check - if this endpoint responds, the service is alive
-            return Ok(ApiResponse<object>.SuccessResult(null, "Service is alive"));
+            var response = new HealthCheckResponse
+            {
+                Status = "Alive",
+                Timestamp = DateTime.UtcNow,
+                Version = "1.0.0",
+                Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"
+            };
+            
+            return Ok(ApiResponse<HealthCheckResponse>.SuccessResult(response, "Service is alive"));
         }
     }
 }

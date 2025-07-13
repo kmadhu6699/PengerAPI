@@ -247,12 +247,18 @@ namespace PengerAPI.Controllers
 
                 _logger.LogInformation("Cleaned up {Count} expired OTPs", deletedCount);
                 
-                return Ok(ApiResponse<object>.SuccessResult(null, $"Cleaned up {deletedCount} expired OTPs"));
+                var response = new OTPCleanupResponse
+                {
+                    DeletedCount = deletedCount,
+                    Timestamp = DateTime.UtcNow
+                };
+                
+                return Ok(ApiResponse<OTPCleanupResponse>.SuccessResult(response, $"Cleaned up {deletedCount} expired OTPs"));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error cleaning up expired OTPs");
-                return StatusCode(500, ApiResponse<object>.ErrorResult("Failed to cleanup expired OTPs"));
+                return StatusCode(500, ApiResponse<OTPCleanupResponse>.ErrorResult("Failed to cleanup expired OTPs"));
             }
         }
 

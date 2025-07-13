@@ -10,7 +10,10 @@ using PengerAPI.Middleware;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
+using PengerAPI.Services;
+using PengerAPI.Data.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,7 +78,10 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserDtoValidator>();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Register AuthService
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+// Configure Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -84,6 +90,28 @@ builder.Services.AddSwaggerGen(c =>
         Title = "Penger API", 
         Version = "v1",
         Description = "Financial management API for Penger application"
+    });
+    
+    // Add JWT Authentication to Swagger
+    var securityScheme = new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Description = "Enter JWT Bearer token",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+    
+    c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { securityScheme, Array.Empty<string>() }
     });
 });
 
@@ -112,6 +140,17 @@ if (app.Environment.IsDevelopment())
 {
     // Seed the database
     DbInitializer.InitializeAsync(app.Services).Wait();
+}
+
+// Seed admin user on startup
+try
+{
+    await AdminUserSeeder.SeedAdminUser(app.Services, builder.Configuration);
+    Console.WriteLine("Admin user seeded successfully");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error seeding admin user: {ex.Message}");
 }
 
 app.Run();

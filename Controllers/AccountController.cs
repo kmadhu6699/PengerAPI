@@ -349,13 +349,21 @@ namespace PengerAPI.Controllers
                     fromAccount.Balance -= transferDto.Amount;
                     toAccount.Balance += transferDto.Amount;
 
+                    var response = new TransferResponse
+                    {
+                        FromAccount = fromAccount.AccountNumber,
+                        ToAccount = toAccount.AccountNumber,
+                        Amount = transferDto.Amount,
+                        Currency = fromAccount.Currency?.Code ?? "USD"
+                    };
+                    
                     await _unitOfWork.Accounts.UpdateAsync(fromAccount);
                     await _unitOfWork.Accounts.UpdateAsync(toAccount);
                     await _unitOfWork.SaveChangesAsync();
 
                     await _unitOfWork.CommitTransactionAsync();
 
-                    return Ok(ApiResponse<object>.SuccessResult(null, 
+                    return Ok(ApiResponse<TransferResponse>.SuccessResult(response, 
                         $"Successfully transferred {transferDto.Amount:C} from account {fromAccount.AccountNumber} to {toAccount.AccountNumber}"));
                 }
                 catch

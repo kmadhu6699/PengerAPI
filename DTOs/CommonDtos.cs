@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PengerAPI.DTOs
 {
@@ -39,6 +40,16 @@ namespace PengerAPI.DTOs
                 Success = false,
                 Message = message,
                 Errors = new List<string> { error }
+            };
+        }
+
+        public static ApiResponse<T> ValidationError(IEnumerable<FluentValidation.Results.ValidationFailure> errors)
+        {
+            return new ApiResponse<T>
+            {
+                Success = false,
+                Message = "Validation failed",
+                Errors = errors.Select(e => e.ErrorMessage).ToList()
             };
         }
     }
@@ -101,11 +112,41 @@ namespace PengerAPI.DTOs
     // Health check response
     public class HealthCheckResponse
     {
-        public string Status { get; set; }
+        public required string Status { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
-        public string Version { get; set; }
+        public string Version { get; set; } = string.Empty;
         public Dictionary<string, object> Details { get; set; } = new();
-        public string Environment { get; set; }
+        public string Environment { get; set; } = string.Empty;
         public string Error { get; set; } = string.Empty;
     }
+
+    public class OTPCleanupResponse
+    {
+        public int DeletedCount { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    }
+
+    public class DeleteResponse
+    {
+        public int Id { get; set; }
+        public bool Success { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    }
+
+    public class PasswordChangeResponse
+    {
+        public int UserId { get; set; }
+        public bool Success { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    }
+
+    public class TransferResponse
+    {
+        public string FromAccount { get; set; } = string.Empty;
+        public string ToAccount { get; set; } = string.Empty;
+        public decimal Amount { get; set; }
+        public string Currency { get; set; } = string.Empty;
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    }
 }
+
