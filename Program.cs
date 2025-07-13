@@ -2,6 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using PengerAPI.Data;
 using PengerAPI.Data.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using PengerAPI.DTOs;
+using PengerAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +32,11 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Configure AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+// Configure FluentValidation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserDtoValidator>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -50,6 +59,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Add validation middleware
+app.UseValidationMiddleware();
+
 app.UseAuthorization();
 app.MapControllers();
 
