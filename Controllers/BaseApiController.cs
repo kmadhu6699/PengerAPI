@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace PengerApi.Controllers
+namespace PengerAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

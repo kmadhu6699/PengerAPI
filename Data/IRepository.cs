@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using PengerApi.Models;
+using PengerAPI.Models;
 
-namespace PengerApi.Data
+namespace PengerAPI.Data
 {
     public interface IRepository<T> where T : BaseEntity
     {

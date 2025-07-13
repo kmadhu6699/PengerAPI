@@ -4,9 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PengerApi.Models;
+using PengerAPI.Models;
 
-namespace PengerApi.Data
+namespace PengerAPI.Data
 {
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace PengerApi.Models
+namespace PengerAPI.Models
 {
     public abstract class BaseEntity
     {
