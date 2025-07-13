@@ -6,6 +6,7 @@ namespace PengerAPI.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool IsActive { get; set; } = true;
         
         // Navigation property
         public virtual ICollection<Account> Accounts { get; set; }

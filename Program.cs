@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using PengerAPI.Data;
+using PengerAPI.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Configure repositories
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+// Configure specific repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+builder.Services.AddScoped<IAccountTypeRepository, AccountTypeRepository>();
+builder.Services.AddScoped<IOTPRepository, OTPRepository>();
+
+// Configure Unit of Work
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Configure AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
