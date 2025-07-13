@@ -22,7 +22,7 @@ namespace PengerAPI.DTOs
             };
         }
 
-        public static ApiResponse<T> ErrorResult(string message, List<string> errors = null)
+        public static ApiResponse<T> ErrorResult(string message, List<string>? errors = null)
         {
             return new ApiResponse<T>
             {
@@ -85,6 +85,7 @@ namespace PengerAPI.DTOs
     public class SearchParams : PaginationParams
     {
         public string SearchTerm { get; set; }
+        public string Query => SearchTerm; // Alias for backward compatibility
         public string SortBy { get; set; }
         public string SortOrder { get; set; } = "asc"; // asc or desc
     }
@@ -104,5 +105,7 @@ namespace PengerAPI.DTOs
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
         public string Version { get; set; }
         public Dictionary<string, object> Details { get; set; } = new();
+        public string Environment { get; set; }
+        public string Error { get; set; } = string.Empty;
     }
 }

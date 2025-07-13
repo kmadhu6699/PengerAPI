@@ -39,5 +39,13 @@ namespace PengerAPI.Data.Repositories
         {
             return await _dbSet.AnyAsync(c => c.Symbol == symbol);
         }
+
+        public async Task<IEnumerable<Currency>> GetActiveAsync()
+        {
+            return await _dbSet
+                .Where(c => c.IsActive)
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+        }
     }
 }

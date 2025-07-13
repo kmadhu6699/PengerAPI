@@ -31,22 +31,32 @@ namespace PengerAPI.DTOs
     {
         public int UserId { get; set; }
         public int ExpiryMinutes { get; set; } = 5; // Default 5 minutes
+
+        public string Purpose { get; set; } = "Verification"; // Default purpose
     }
 
     public class VerifyOTPDto
     {
         public int UserId { get; set; }
         public string Code { get; set; }
+
+        public DateTime ExpiresAt { get; set; } = DateTime.UtcNow.AddMinutes(5); // Default expiry time of 5 minutes
+
+        public string  Purpose { get; set; }
     }
 
     public class ResendOTPDto
     {
         public int UserId { get; set; }
+        public string Purpose { get; set; } = "Verification"; // Default purpose
     }
 
     // Response DTOs for OTP operations
     public class OTPGeneratedDto
     {
+        public int OTPId { get; set; }
+
+        public string Purpose { get; set; } = "Verification"; // Default purpose
         public string Code { get; set; }
         public DateTime ExpiresAt { get; set; }
         public int ExpiryMinutes { get; set; }
@@ -58,6 +68,8 @@ namespace PengerAPI.DTOs
         public bool IsValid { get; set; }
         public string Message { get; set; }
         public DateTime? VerifiedAt { get; set; }
+        
+        public string Purpose { get; set; } = "Verification"; // Default purpose
     }
 
     // Validators

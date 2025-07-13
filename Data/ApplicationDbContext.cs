@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using PengerAPI.Models;
 
 namespace PengerAPI.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -11,7 +12,7 @@ namespace PengerAPI.Data
         }
 
         // Add DbSets for your entities here
-        public DbSet<User> Users { get; set; }
+        public DbSet<ApplicationUser> Users { get; set; }
         public DbSet<OTP> OTPs { get; set; }
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<AccountType> AccountTypes { get; set; }
@@ -24,7 +25,7 @@ namespace PengerAPI.Data
             // Configure entity relationships and constraints
             
             // User entity configuration
-            modelBuilder.Entity<User>()
+            modelBuilder.Entity<ApplicationUser>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
             

@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PengerAPI.DTOs;
 using PengerAPI.Models;
 
 namespace PengerAPI.Data.Repositories
@@ -45,6 +48,40 @@ namespace PengerAPI.Data.Repositories
             return await _dbSet
                 .Include(u => u.OTPs)
                 .FirstOrDefaultAsync(u => u.Id == userId);
+        }
+
+        public async Task<User?> GetByIdWithAccountsAsync(int userId)
+        {
+            return await _dbSet
+                .Include(u => u.Accounts)
+                .ThenInclude(a => a.Currency)
+                .Include(u => u.Accounts)
+                .ThenInclude(a => a.AccountType)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+        }
+
+        public async Task<PagedResult<User>> SearchAsync(string query, int pageNumber, int pageSize)
+        {
+            var queryable = _dbSet.AsQueryable();
+            
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                queryable = queryable.Where(u => 
+                    u.FirstName.Contains(query) ||
+                    u.LastName.Contains(query) ||
+                    u.Email.Contains(query) ||
+                    u.Username.Contains(query));
+            }
+            
+            var totalCount = await queryable.CountAsync();
+            var items = await queryable
+                .OrderBy(u => u.FirstName)
+                .ThenBy(u => u.LastName)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            
+            return new PagedResult<User>(items, totalCount, pageNumber, pageSize);
         }
     }
 }

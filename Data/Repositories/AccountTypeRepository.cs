@@ -29,5 +29,13 @@ namespace PengerAPI.Data.Repositories
         {
             return await _dbSet.AnyAsync(at => at.Name == name);
         }
+
+        public async Task<IEnumerable<AccountType>> GetActiveAsync()
+        {
+            return await _dbSet
+                .Where(at => at.IsActive)
+                .OrderBy(at => at.Name)
+                .ToListAsync();
+        }
     }
 }

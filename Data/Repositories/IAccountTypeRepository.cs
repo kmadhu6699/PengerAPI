@@ -8,6 +8,7 @@ namespace PengerAPI.Data.Repositories
     {
         Task<AccountType?> GetByNameAsync(string name);
         Task<IEnumerable<AccountType>> GetActiveAccountTypesAsync();
+        Task<IEnumerable<AccountType>> GetActiveAsync();
         Task<bool> NameExistsAsync(string name);
     }
 }

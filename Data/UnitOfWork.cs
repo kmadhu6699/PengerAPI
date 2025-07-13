@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Storage;
-using PengerAPI.Data.Repositories;
+using PengerAPI.Data;
 
-namespace PengerAPI.Data
+namespace PengerAPI.Data.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {

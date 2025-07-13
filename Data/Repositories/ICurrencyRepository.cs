@@ -9,6 +9,7 @@ namespace PengerAPI.Data.Repositories
         Task<Currency?> GetByCodeAsync(string code);
         Task<Currency?> GetBySymbolAsync(string symbol);
         Task<IEnumerable<Currency>> GetActiveCurrenciesAsync();
+        Task<IEnumerable<Currency>> GetActiveAsync();
         Task<bool> CodeExistsAsync(string code);
         Task<bool> SymbolExistsAsync(string symbol);
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PengerAPI.DTOs;
 using PengerAPI.Models;
 
 namespace PengerAPI.Data.Repositories
@@ -63,14 +64,56 @@ namespace PengerAPI.Data.Repositories
                 !otp.IsUsed);
         }
 
-        public async Task CleanupExpiredOTPsAsync()
+        public async Task<PagedResult<OTP>> GetByUserIdPagedAsync(int userId, int pageNumber, int pageSize)
+        {
+            var totalCount = await _dbSet.CountAsync(otp => otp.UserId == userId);
+            var items = await _dbSet
+                .Where(otp => otp.UserId == userId)
+                .OrderByDescending(otp => otp.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            
+            return new PagedResult<OTP>(items, totalCount, pageNumber, pageSize);
+        }
+
+        public async Task<OTP?> GetActiveOTPAsync(int userId, string purpose)
+        {
+            return await _dbSet
+                .FirstOrDefaultAsync(otp => 
+                    otp.UserId == userId && 
+                    otp.Purpose == purpose && 
+                    otp.ExpiresAt > DateTime.UtcNow && 
+                    !otp.IsUsed);
+        }
+
+        public async Task<OTP?> GetByCodeAsync(string code)
+        {
+            return await _dbSet
+                .FirstOrDefaultAsync(otp => otp.Code == code);
+        }
+
+        public async Task<OTP?> GetRecentOTPAsync(int userId, string purpose, TimeSpan timeSpan)
+        {
+            var cutoffTime = DateTime.UtcNow.Subtract(timeSpan);
+            return await _dbSet
+                .Where(otp => 
+                    otp.UserId == userId && 
+                    otp.Purpose == purpose && 
+                    otp.CreatedAt >= cutoffTime)
+                .OrderByDescending(otp => otp.CreatedAt)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<int> DeleteExpiredOTPsAsync()
         {
             var expiredOTPs = await _dbSet
                 .Where(otp => otp.ExpiresAt <= DateTime.UtcNow)
                 .ToListAsync();
 
+            var count = expiredOTPs.Count;
             _dbSet.RemoveRange(expiredOTPs);
-            await _context.SaveChangesAsync();
+            return count;
         }
     }
 }

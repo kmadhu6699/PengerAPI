@@ -7,7 +7,9 @@ namespace PengerAPI.Data.Repositories
     public interface IAccountRepository : IRepository<Account>
     {
         Task<IEnumerable<Account>> GetAccountsByUserIdAsync(int userId);
+        Task<IEnumerable<Account>> GetByUserIdAsync(int userId);
         Task<Account?> GetAccountWithDetailsAsync(int accountId);
+        Task<Account?> GetByIdWithDetailsAsync(int accountId);
         Task<IEnumerable<Account>> GetAccountsByCurrencyAsync(int currencyId);
         Task<IEnumerable<Account>> GetAccountsByTypeAsync(int accountTypeId);
         Task<decimal> GetTotalBalanceByUserAsync(int userId);

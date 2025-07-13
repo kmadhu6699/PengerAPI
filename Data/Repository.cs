@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PengerAPI.DTOs;
 using PengerAPI.Models;
 
 namespace PengerAPI.Data
@@ -56,21 +57,27 @@ namespace PengerAPI.Data
         }
 
         // Paging
-        public async Task<IEnumerable<T>> GetPagedAsync(int pageNumber, int pageSize)
+        public async Task<PagedResult<T>> GetPagedAsync(int pageNumber, int pageSize)
         {
-            return await _dbSet
+            var totalCount = await _dbSet.CountAsync();
+            var items = await _dbSet
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+            
+            return new PagedResult<T>(items, totalCount, pageNumber, pageSize);
         }
 
-        public async Task<IEnumerable<T>> GetPagedAsync(int pageNumber, int pageSize, Expression<Func<T, bool>> predicate)
+        public async Task<PagedResult<T>> GetPagedAsync(int pageNumber, int pageSize, Expression<Func<T, bool>> predicate)
         {
-            return await _dbSet
+            var totalCount = await _dbSet.CountAsync(predicate);
+            var items = await _dbSet
                 .Where(predicate)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+            
+            return new PagedResult<T>(items, totalCount, pageNumber, pageSize);
         }
 
         // Write operations

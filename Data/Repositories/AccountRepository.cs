@@ -66,5 +66,24 @@ namespace PengerAPI.Data.Repositories
         {
             return await _dbSet.AnyAsync(a => a.UserId == userId && a.Name == accountName);
         }
+
+        public async Task<IEnumerable<Account>> GetByUserIdAsync(int userId)
+        {
+            return await _dbSet
+                .Where(a => a.UserId == userId)
+                .Include(a => a.Currency)
+                .Include(a => a.AccountType)
+                .OrderBy(a => a.Name)
+                .ToListAsync();
+        }
+
+        public async Task<Account?> GetByIdWithDetailsAsync(int accountId)
+        {
+            return await _dbSet
+                .Include(a => a.Currency)
+                .Include(a => a.AccountType)
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(a => a.Id == accountId);
+        }
     }
 }

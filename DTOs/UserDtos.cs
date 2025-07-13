@@ -49,11 +49,6 @@ namespace PengerAPI.DTOs
         public string ConfirmNewPassword { get; set; }
     }
 
-    public class LoginDto
-    {
-        public string EmailOrUsername { get; set; }
-        public string Password { get; set; }
-    }
 
     public class LoginResponseDto
     {
@@ -139,7 +134,7 @@ namespace PengerAPI.DTOs
     {
         public LoginDtoValidator()
         {
-            RuleFor(x => x.EmailOrUsername)
+            RuleFor(x => x.UsernameOrEmail)
                 .NotEmpty().WithMessage("Email or username is required");
 
             RuleFor(x => x.Password)
