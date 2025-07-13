@@ -1,5 +1,3 @@
-using System;
-
 namespace PengerAPI.Models
 {
     public abstract class BaseEntity

@@ -1,13 +1,12 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PengerAPI.Models;
 
 namespace PengerAPI.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
@@ -39,7 +38,7 @@ namespace PengerAPI.Data
                 .WithMany(at => at.Accounts)
                 .HasForeignKey(a => a.AccountTypeId)
                 .OnDelete(DeleteBehavior.Restrict);
-                
+
             modelBuilder.Entity<Account>()
                 .HasOne(a => a.Currency)
                 .WithMany(c => c.Accounts)

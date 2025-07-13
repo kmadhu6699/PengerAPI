@@ -1,7 +1,7 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using PengerAPI.DTOs;
 using PengerAPI.Services;
-using FluentValidation;
 
 namespace PengerAPI.Controllers
 {

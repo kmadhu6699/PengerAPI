@@ -1,7 +1,4 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Storage;
-using PengerAPI.Data;
 
 namespace PengerAPI.Data.Repositories
 {

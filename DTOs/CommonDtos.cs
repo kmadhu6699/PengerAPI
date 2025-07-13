@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace PengerAPI.DTOs
 {
     // Standard API Response wrapper
@@ -84,7 +80,7 @@ namespace PengerAPI.DTOs
         private int _pageSize = 10;
 
         public int PageNumber { get; set; } = 1;
-        
+
         public int PageSize
         {
             get => _pageSize;

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PengerAPI.DTOs;
 using PengerAPI.Models;
@@ -17,10 +13,10 @@ namespace PengerAPI.Data.Repositories
         public async Task<OTP?> GetValidOTPAsync(int userId, string code)
         {
             return await _dbSet
-                .FirstOrDefaultAsync(otp => 
-                    otp.UserId == userId && 
-                    otp.Code == code && 
-                    otp.ExpiresAt > DateTime.UtcNow && 
+                .FirstOrDefaultAsync(otp =>
+                    otp.UserId == userId &&
+                    otp.Code == code &&
+                    otp.ExpiresAt > DateTime.UtcNow &&
                     !otp.IsUsed);
         }
 
@@ -57,10 +53,10 @@ namespace PengerAPI.Data.Repositories
 
         public async Task<bool> IsValidOTPAsync(int userId, string code)
         {
-            return await _dbSet.AnyAsync(otp => 
-                otp.UserId == userId && 
-                otp.Code == code && 
-                otp.ExpiresAt > DateTime.UtcNow && 
+            return await _dbSet.AnyAsync(otp =>
+                otp.UserId == userId &&
+                otp.Code == code &&
+                otp.ExpiresAt > DateTime.UtcNow &&
                 !otp.IsUsed);
         }
 
@@ -73,17 +69,17 @@ namespace PengerAPI.Data.Repositories
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
-            
+
             return new PagedResult<OTP>(items, totalCount, pageNumber, pageSize);
         }
 
         public async Task<OTP?> GetActiveOTPAsync(int userId, string purpose)
         {
             return await _dbSet
-                .FirstOrDefaultAsync(otp => 
-                    otp.UserId == userId && 
-                    otp.Purpose == purpose && 
-                    otp.ExpiresAt > DateTime.UtcNow && 
+                .FirstOrDefaultAsync(otp =>
+                    otp.UserId == userId &&
+                    otp.Purpose == purpose &&
+                    otp.ExpiresAt > DateTime.UtcNow &&
                     !otp.IsUsed);
         }
 
@@ -97,9 +93,9 @@ namespace PengerAPI.Data.Repositories
         {
             var cutoffTime = DateTime.UtcNow.Subtract(timeSpan);
             return await _dbSet
-                .Where(otp => 
-                    otp.UserId == userId && 
-                    otp.Purpose == purpose && 
+                .Where(otp =>
+                    otp.UserId == userId &&
+                    otp.Purpose == purpose &&
                     otp.CreatedAt >= cutoffTime)
                 .OrderByDescending(otp => otp.CreatedAt)
                 .FirstOrDefaultAsync();

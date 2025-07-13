@@ -1,10 +1,5 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using PengerAPI.Models;
-using System;
-using System.Threading.Tasks;
 
 namespace PengerAPI.Data.Seeders
 {
@@ -38,11 +33,24 @@ namespace PengerAPI.Data.Seeders
                         Email = adminEmail,
                         FirstName = "Admin",
                         LastName = "User",
-                        EmailConfirmed = true
+                        Name = "Admin User",
+                        EmailConfirmed = true, // Auto-confirm for now
+                        RememberToken = string.Empty, // Initialize with empty string
+                        EmailVerifiedAt = DateTime.UtcNow,
+                        PhoneNumber = "",
+                        PhoneNumberConfirmed = false,
+                        TwoFactorEnabled = false,
+                        LockoutEnabled = true,
+                        AccessFailedCount = 0
                     };
 
+                    // Set a secure password
+                    var hasher = new PasswordHasher<ApplicationUser>();
+                    newAdmin.PasswordHash = hasher.HashPassword(newAdmin, adminPassword);
+                    newAdmin.SecurityStamp = Guid.NewGuid().ToString();
+
                     var result = await userManager.CreateAsync(newAdmin, adminPassword);
-                    
+
                     if (result.Succeeded)
                     {
                         await userManager.AddToRoleAsync(newAdmin, "Admin");

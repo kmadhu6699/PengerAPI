@@ -1,6 +1,3 @@
-using System;
-using System.Threading.Tasks;
-
 namespace PengerAPI.Data.Repositories
 {
     public interface IUnitOfWork : IDisposable

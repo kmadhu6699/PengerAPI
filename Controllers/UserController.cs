@@ -37,7 +37,7 @@ namespace PengerAPI.Controllers
                 );
 
                 var userDtos = _mapper.Map<List<UserSummaryDto>>(users.Items);
-                
+
                 var response = new PagedResponse<UserSummaryDto>(
                     userDtos,
                     users.TotalCount,
@@ -107,7 +107,7 @@ namespace PengerAPI.Controllers
                 await _unitOfWork.SaveChangesAsync();
 
                 var userDto = _mapper.Map<UserDto>(user);
-                return CreatedAtAction(nameof(GetUser), new { id = user.Id }, 
+                return CreatedAtAction(nameof(GetUser), new { id = user.Id },
                     ApiResponse<UserDto>.SuccessResult(userDto, "User created successfully"));
             }
             catch (Exception ex)
@@ -236,7 +236,7 @@ namespace PengerAPI.Controllers
                 );
 
                 var userDtos = _mapper.Map<List<UserSummaryDto>>(users.Items);
-                
+
                 var response = new PagedResponse<UserSummaryDto>(
                     userDtos,
                     users.TotalCount,

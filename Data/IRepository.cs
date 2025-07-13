@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using PengerAPI.DTOs;
 using PengerAPI.Models;
+using System.Linq.Expressions;
 
 namespace PengerAPI.Data
 {
@@ -17,11 +14,11 @@ namespace PengerAPI.Data
         Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate);
         Task<int> CountAsync();
         Task<int> CountAsync(Expression<Func<T, bool>> predicate);
-        
+
         // Paging
         Task<PagedResult<T>> GetPagedAsync(int pageNumber, int pageSize);
         Task<PagedResult<T>> GetPagedAsync(int pageNumber, int pageSize, Expression<Func<T, bool>> predicate);
-        
+
         // Write operations
         Task AddAsync(T entity);
         Task AddRangeAsync(IEnumerable<T> entities);
@@ -30,7 +27,7 @@ namespace PengerAPI.Data
         Task DeleteAsync(int id);
         Task DeleteAsync(T entity);
         Task DeleteRangeAsync(IEnumerable<T> entities);
-        
+
         // Unit of work
         Task<int> SaveChangesAsync();
     }

@@ -1,5 +1,3 @@
-using System;
-
 namespace PengerAPI.Models
 {
     public class Account : BaseEntity
@@ -10,7 +8,7 @@ namespace PengerAPI.Models
         public string AccountNumber { get; set; }
         public string Name { get; set; }
         public decimal Balance { get; set; }
-        
+
         // Navigation properties
         public virtual User User { get; set; }
         public virtual AccountType AccountType { get; set; }

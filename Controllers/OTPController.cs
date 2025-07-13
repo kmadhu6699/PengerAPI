@@ -67,7 +67,7 @@ namespace PengerAPI.Controllers
                 };
 
                 _logger.LogInformation("OTP generated for user {UserId} with purpose {Purpose}", generateOTPDto.UserId, generateOTPDto.Purpose);
-                
+
                 return Ok(ApiResponse<OTPGeneratedDto>.SuccessResult(response, "OTP generated successfully"));
             }
             catch (Exception ex)
@@ -128,7 +128,7 @@ namespace PengerAPI.Controllers
                 };
 
                 _logger.LogInformation("OTP verified successfully for user {UserId} with purpose {Purpose}", verifyOTPDto.UserId, verifyOTPDto.Purpose);
-                
+
                 return Ok(ApiResponse<OTPVerificationDto>.SuccessResult(response, "OTP verified successfully"));
             }
             catch (Exception ex)
@@ -190,7 +190,7 @@ namespace PengerAPI.Controllers
                 };
 
                 _logger.LogInformation("OTP resent for user {UserId} with purpose {Purpose}", resendOTPDto.UserId, resendOTPDto.Purpose);
-                
+
                 return Ok(ApiResponse<OTPGeneratedDto>.SuccessResult(response, "OTP resent successfully"));
             }
             catch (Exception ex)
@@ -217,7 +217,7 @@ namespace PengerAPI.Controllers
 
                 var otps = await _unitOfWork.OTPs.GetByUserIdPagedAsync(userId, paginationParams.PageNumber, paginationParams.PageSize);
                 var otpDtos = _mapper.Map<List<OTPSummaryDto>>(otps.Items);
-                
+
                 var response = new PagedResponse<OTPSummaryDto>(
                     otpDtos,
                     otps.TotalCount,
@@ -246,13 +246,13 @@ namespace PengerAPI.Controllers
                 await _unitOfWork.SaveChangesAsync();
 
                 _logger.LogInformation("Cleaned up {Count} expired OTPs", deletedCount);
-                
+
                 var response = new OTPCleanupResponse
                 {
                     DeletedCount = deletedCount,
                     Timestamp = DateTime.UtcNow
                 };
-                
+
                 return Ok(ApiResponse<OTPCleanupResponse>.SuccessResult(response, $"Cleaned up {deletedCount} expired OTPs"));
             }
             catch (Exception ex)

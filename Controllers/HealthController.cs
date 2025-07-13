@@ -39,7 +39,7 @@ namespace PengerAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Health check failed");
-                
+
                 var response = new HealthCheckResponse
                 {
                     Status = "Unhealthy",
@@ -101,7 +101,7 @@ namespace PengerAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Detailed health check failed");
-                
+
                 response.Status = "Unhealthy";
                 response.Error = ex.Message;
                 response.Details = new Dictionary<string, object>
@@ -168,7 +168,7 @@ namespace PengerAPI.Controllers
                 Version = "1.0.0",
                 Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"
             };
-            
+
             return Ok(ApiResponse<HealthCheckResponse>.SuccessResult(response, "Service is alive"));
         }
     }

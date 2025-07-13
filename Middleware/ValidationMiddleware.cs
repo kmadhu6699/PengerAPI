@@ -1,7 +1,7 @@
-using System.Net;
-using System.Text.Json;
 using FluentValidation;
 using PengerAPI.DTOs;
+using System.Net;
+using System.Text.Json;
 
 namespace PengerAPI.Middleware
 {

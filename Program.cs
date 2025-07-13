@@ -1,19 +1,17 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PengerAPI.Data;
 using PengerAPI.Data.Repositories;
-using FluentValidation;
-using FluentValidation.AspNetCore;
+using PengerAPI.Data.Seeders;
 using PengerAPI.DTOs;
 using PengerAPI.Middleware;
-
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.Text;
 using PengerAPI.Services;
-using PengerAPI.Data.Seeders;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,13 +83,13 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo 
-    { 
-        Title = "Penger API", 
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Penger API",
         Version = "v1",
         Description = "Financial management API for Penger application"
     });
-    
+
     // Add JWT Authentication to Swagger
     var securityScheme = new OpenApiSecurityScheme
     {
@@ -107,7 +105,7 @@ builder.Services.AddSwaggerGen(c =>
             Type = ReferenceType.SecurityScheme
         }
     };
-    
+
     c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {

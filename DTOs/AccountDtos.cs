@@ -1,5 +1,3 @@
-using System;
-using System.ComponentModel.DataAnnotations;
 using FluentValidation;
 
 namespace PengerAPI.DTOs
@@ -12,7 +10,7 @@ namespace PengerAPI.DTOs
         public int UserId { get; set; }
         public int CurrencyId { get; set; }
         public int AccountTypeId { get; set; }
-        
+
         // Navigation properties
         public UserSummaryDto User { get; set; }
         public CurrencyDto Currency { get; set; }

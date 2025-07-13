@@ -1,4 +1,3 @@
-using System;
 using FluentValidation;
 
 namespace PengerAPI.DTOs
@@ -42,7 +41,7 @@ namespace PengerAPI.DTOs
 
         public DateTime ExpiresAt { get; set; } = DateTime.UtcNow.AddMinutes(5); // Default expiry time of 5 minutes
 
-        public string  Purpose { get; set; }
+        public string Purpose { get; set; }
     }
 
     public class ResendOTPDto
@@ -68,7 +67,7 @@ namespace PengerAPI.DTOs
         public bool IsValid { get; set; }
         public string Message { get; set; }
         public DateTime? VerifiedAt { get; set; }
-        
+
         public string Purpose { get; set; } = "Verification"; // Default purpose
     }
 

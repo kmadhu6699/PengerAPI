@@ -35,7 +35,7 @@ namespace PengerAPI.Controllers
                 );
 
                 var currencyDtos = _mapper.Map<List<CurrencySummaryDto>>(currencies.Items);
-                
+
                 var response = new PagedResponse<CurrencySummaryDto>(
                     currencyDtos,
                     currencies.TotalCount,
@@ -62,7 +62,7 @@ namespace PengerAPI.Controllers
             {
                 var currencies = await _unitOfWork.Currencies.GetActiveAsync();
                 var currencyDtos = _mapper.Map<List<CurrencySummaryDto>>(currencies);
-                
+
                 return Ok(ApiResponse<IEnumerable<CurrencySummaryDto>>.SuccessResult(currencyDtos));
             }
             catch (Exception ex)
@@ -142,7 +142,7 @@ namespace PengerAPI.Controllers
                 await _unitOfWork.SaveChangesAsync();
 
                 var currencyDto = _mapper.Map<CurrencyDto>(currency);
-                return CreatedAtAction(nameof(GetCurrency), new { id = currency.Id }, 
+                return CreatedAtAction(nameof(GetCurrency), new { id = currency.Id },
                     ApiResponse<CurrencyDto>.SuccessResult(currencyDto, "Currency created successfully"));
             }
             catch (Exception ex)
@@ -245,7 +245,7 @@ namespace PengerAPI.Controllers
 
                 var currencyDto = _mapper.Map<CurrencyDto>(currency);
                 var statusMessage = currency.IsActive ? "activated" : "deactivated";
-                
+
                 return Ok(ApiResponse<CurrencyDto>.SuccessResult(currencyDto, $"Currency {statusMessage} successfully"));
             }
             catch (Exception ex)

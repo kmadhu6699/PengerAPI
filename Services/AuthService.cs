@@ -1,13 +1,10 @@
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PengerAPI.DTOs;
 using PengerAPI.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace PengerAPI.Services
 {
@@ -36,7 +33,16 @@ namespace PengerAPI.Services
                 Email = registerDto.Email,
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
-                EmailConfirmed = true // Auto-confirm for now
+                Name = $"{registerDto.FirstName} {registerDto.LastName}".Trim(),
+                EmailConfirmed = true, // Auto-confirm for now
+                RememberToken = string.Empty, // Initialize with empty string
+                EmailVerifiedAt = DateTime.UtcNow,
+                PhoneNumber = "",
+                PhoneNumberConfirmed = false,
+                TwoFactorEnabled = false,
+                LockoutEnabled = true,
+                AccessFailedCount = 0,
+                SecurityStamp = Guid.NewGuid().ToString()
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);

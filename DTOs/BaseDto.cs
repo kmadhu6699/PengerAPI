@@ -1,5 +1,3 @@
-using System;
-
 namespace PengerAPI.DTOs
 {
     public abstract class BaseDto

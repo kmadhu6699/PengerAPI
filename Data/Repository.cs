@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PengerAPI.DTOs;
 using PengerAPI.Models;
+using System.Linq.Expressions;
 
 namespace PengerAPI.Data
 {
@@ -64,7 +60,7 @@ namespace PengerAPI.Data
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
-            
+
             return new PagedResult<T>(items, totalCount, pageNumber, pageSize);
         }
 
@@ -76,7 +72,7 @@ namespace PengerAPI.Data
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
-            
+
             return new PagedResult<T>(items, totalCount, pageNumber, pageSize);
         }
 

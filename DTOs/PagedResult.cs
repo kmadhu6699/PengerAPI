@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace PengerAPI.DTOs
 {
     public class PagedResult<T>

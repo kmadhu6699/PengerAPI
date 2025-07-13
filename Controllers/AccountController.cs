@@ -35,7 +35,7 @@ namespace PengerAPI.Controllers
                 );
 
                 var accountDtos = _mapper.Map<List<AccountSummaryDto>>(accounts.Items);
-                
+
                 var response = new PagedResponse<AccountSummaryDto>(
                     accountDtos,
                     accounts.TotalCount,
@@ -86,7 +86,7 @@ namespace PengerAPI.Controllers
             {
                 var accounts = await _unitOfWork.Accounts.GetByUserIdAsync(userId);
                 var accountDtos = _mapper.Map<List<AccountSummaryDto>>(accounts);
-                
+
                 return Ok(ApiResponse<IEnumerable<AccountSummaryDto>>.SuccessResult(accountDtos));
             }
             catch (Exception ex)
@@ -135,7 +135,7 @@ namespace PengerAPI.Controllers
                 account = await _unitOfWork.Accounts.GetByIdWithDetailsAsync(account.Id);
                 var accountDto = _mapper.Map<AccountDto>(account);
 
-                return CreatedAtAction(nameof(GetAccount), new { id = account.Id }, 
+                return CreatedAtAction(nameof(GetAccount), new { id = account.Id },
                     ApiResponse<AccountDto>.SuccessResult(accountDto, "Account created successfully"));
             }
             catch (Exception ex)
@@ -271,7 +271,7 @@ namespace PengerAPI.Controllers
                 await _unitOfWork.SaveChangesAsync();
 
                 var balanceDto = _mapper.Map<AccountBalanceDto>(account);
-                return Ok(ApiResponse<AccountBalanceDto>.SuccessResult(balanceDto, 
+                return Ok(ApiResponse<AccountBalanceDto>.SuccessResult(balanceDto,
                     $"Successfully deposited {depositDto.Amount:C} to account"));
             }
             catch (Exception ex)
@@ -305,7 +305,7 @@ namespace PengerAPI.Controllers
                 await _unitOfWork.SaveChangesAsync();
 
                 var balanceDto = _mapper.Map<AccountBalanceDto>(account);
-                return Ok(ApiResponse<AccountBalanceDto>.SuccessResult(balanceDto, 
+                return Ok(ApiResponse<AccountBalanceDto>.SuccessResult(balanceDto,
                     $"Successfully withdrew {withdrawDto.Amount:C} from account"));
             }
             catch (Exception ex)
@@ -356,14 +356,14 @@ namespace PengerAPI.Controllers
                         Amount = transferDto.Amount,
                         Currency = fromAccount.Currency?.Code ?? "USD"
                     };
-                    
+
                     await _unitOfWork.Accounts.UpdateAsync(fromAccount);
                     await _unitOfWork.Accounts.UpdateAsync(toAccount);
                     await _unitOfWork.SaveChangesAsync();
 
                     await _unitOfWork.CommitTransactionAsync();
 
-                    return Ok(ApiResponse<TransferResponse>.SuccessResult(response, 
+                    return Ok(ApiResponse<TransferResponse>.SuccessResult(response,
                         $"Successfully transferred {transferDto.Amount:C} from account {fromAccount.AccountNumber} to {toAccount.AccountNumber}"));
                 }
                 catch

@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using PengerAPI.Models;
 
 namespace PengerAPI.Data
@@ -15,18 +9,18 @@ namespace PengerAPI.Data
         {
             using var scope = serviceProvider.CreateScope();
             var services = scope.ServiceProvider;
-            
+
             try
             {
                 var context = services.GetRequiredService<ApplicationDbContext>();
-                
+
                 // Ensure database is created
                 await context.Database.MigrateAsync();
-                
+
                 // Seed data
                 await SeedCurrenciesAsync(context);
                 await SeedAccountTypesAsync(context);
-                
+
                 await context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -35,14 +29,14 @@ namespace PengerAPI.Data
                 logger.LogError(ex, "An error occurred while seeding the database.");
             }
         }
-        
+
         private static async Task SeedCurrenciesAsync(ApplicationDbContext context)
         {
             if (await context.Currencies.AnyAsync())
             {
                 return; // DB has already been seeded with currencies
             }
-            
+
             var currencies = new List<Currency>
             {
                 new Currency { Code = "USD", Name = "US Dollar", Symbol = "$" },
@@ -51,17 +45,17 @@ namespace PengerAPI.Data
                 new Currency { Code = "JPY", Name = "Japanese Yen", Symbol = "¥" },
                 new Currency { Code = "INR", Name = "Indian Rupee", Symbol = "₹" }
             };
-            
+
             await context.Currencies.AddRangeAsync(currencies);
         }
-        
+
         private static async Task SeedAccountTypesAsync(ApplicationDbContext context)
         {
             if (await context.AccountTypes.AnyAsync())
             {
                 return; // DB has already been seeded with account types
             }
-            
+
             var accountTypes = new List<AccountType>
             {
                 new AccountType { Name = "Savings", Description = "A basic savings account for storing money and earning interest" },
@@ -70,7 +64,7 @@ namespace PengerAPI.Data
                 new AccountType { Name = "Credit Card", Description = "A credit card account" },
                 new AccountType { Name = "Loan", Description = "A loan account" }
             };
-            
+
             await context.AccountTypes.AddRangeAsync(accountTypes);
         }
     }

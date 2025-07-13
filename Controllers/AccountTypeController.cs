@@ -35,7 +35,7 @@ namespace PengerAPI.Controllers
                 );
 
                 var accountTypeDtos = _mapper.Map<List<AccountTypeSummaryDto>>(accountTypes.Items);
-                
+
                 var response = new PagedResponse<AccountTypeSummaryDto>(
                     accountTypeDtos,
                     accountTypes.TotalCount,
@@ -62,7 +62,7 @@ namespace PengerAPI.Controllers
             {
                 var accountTypes = await _unitOfWork.AccountTypes.GetActiveAsync();
                 var accountTypeDtos = _mapper.Map<List<AccountTypeSummaryDto>>(accountTypes);
-                
+
                 return Ok(ApiResponse<IEnumerable<AccountTypeSummaryDto>>.SuccessResult(accountTypeDtos));
             }
             catch (Exception ex)
@@ -141,7 +141,7 @@ namespace PengerAPI.Controllers
                 await _unitOfWork.SaveChangesAsync();
 
                 var accountTypeDto = _mapper.Map<AccountTypeDto>(accountType);
-                return CreatedAtAction(nameof(GetAccountType), new { id = accountType.Id }, 
+                return CreatedAtAction(nameof(GetAccountType), new { id = accountType.Id },
                     ApiResponse<AccountTypeDto>.SuccessResult(accountTypeDto, "Account type created successfully"));
             }
             catch (Exception ex)
@@ -242,7 +242,7 @@ namespace PengerAPI.Controllers
 
                 var accountTypeDto = _mapper.Map<AccountTypeDto>(accountType);
                 var statusMessage = accountType.IsActive ? "activated" : "deactivated";
-                
+
                 return Ok(ApiResponse<AccountTypeDto>.SuccessResult(accountTypeDto, $"Account type {statusMessage} successfully"));
             }
             catch (Exception ex)
